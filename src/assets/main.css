@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.default-button{
+    @apply rounded-md h-10 px-2 hover:bg-gray-100 flex justify-center items-center min-w-10 w-fit gap-1
+}
+
+.active-button{
+    @apply rounded-md h-10 px-8 flex justify-center items-center bg-black text-white hover:bg-gray-900 hover:text-white m-1
+}
+
+.action-btn{
+    @apply px-10 py-6 flex text-2xl font-light cursor-pointer w-1/6 justify-center hover:brightness-110
+}
+
+.dot{
+    @apply w-2 h-2 rounded-full
+}
+
+.active-date{
+    @apply bg-gray-300 hover:bg-gray-500
+}
+
+.grid-col-1-\/5-4-1{
+    grid-template-rows: 1fr .5fr 4.5fr 1fr;
+}
+
+.grid-row-4-1{
+    grid-template-rows: 3.5fr 1fr;
+}
+
+.grid-row-1-5{
+    grid-template-rows: .5fr 5fr;
+}
+
+.adjust-sm{
+    padding: 0 5%;
+}
+
+.cs-scrollbar::-webkit-scrollbar{
+    border-radius: 5px;
+    background-color: none;
+    width: 5px;
+}
+
+.cs-scrollbar::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    width: 5px;
+    @apply rounded-md bg-black hover:bg-gray-800 active:cursor-grabbing cursor-grab 
+}
+
+.cs-body-scrollbar::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    width: 10px;
+    padding: 4px;
+    @apply rounded-md bg-black hover:bg-gray-800 active:cursor-grabbing cursor-grab 
+}
