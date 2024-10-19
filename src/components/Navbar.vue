@@ -2,6 +2,8 @@
     import { defineProps } from 'vue'; 
     import { RouterLink, useRoute } from 'vue-router'; 
 
+    import profileImage from '@/assets/img/profile.png'
+
     const isActiveLink = (routePath) => {
         const route = useRoute();
         return route.path === routePath;
@@ -27,7 +29,7 @@
             <i class="pi pi-bell"></i>
         </button>
         <div class="relative rounded-full">
-            <img :src="profile" alt="User" class="w-10 h-10 rounded-full">
+            <img :src="profileImage" alt="User" class="w-10 h-10 rounded-full">
         </div>
         <!-- <button id="darkModeToggle" class="default-button p-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600">
             <i class="pi pi-moon dark:pi pi-sun"></i>

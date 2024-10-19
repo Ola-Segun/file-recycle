@@ -7,11 +7,11 @@
 }
 
 .active-button{
-    @apply rounded-md h-10 px-8 flex justify-center items-center bg-black text-white hover:bg-gray-900 hover:text-white m-1
+    @apply rounded-md h-10 px-8 gap-2 flex justify-center items-center bg-black text-white hover:bg-gray-900 hover:text-white m-1
 }
 
 .action-btn{
-    @apply px-10 py-6 flex text-2xl font-light cursor-pointer w-1/6 justify-center hover:brightness-110
+    @apply px-10 py-6  flex text-2xl font-light cursor-pointer w-1/6 justify-center hover:brightness-110
 }
 
 .dot{

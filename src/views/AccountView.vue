@@ -2,6 +2,7 @@
 import { reactive, ref } from 'vue';
 
 import Card from '@/components/Card.vue';
+import profileImage from '@/assets/img/profile.png'
 
 const accountButtonProps = reactive([
     { id: 1, name: 'Personal Info', icon: 'pi pi-user', isActive: ref(true) },
@@ -12,7 +13,7 @@ const accountButtonProps = reactive([
 ]);
 
 // const profiles = reactive([
-//     { title_id: 1, title: 'Profile Info', profile_content: { full_name: 'John Doe', email: 'johndoe@gmail.com', gender: 'Male', date_of_birth: 'August 02, 1987', phone_number: '+2348 045 432 3321' } },
+//     { title_id: 1, title: 'Personal Info', profile_content: { full_name: 'John Doe', email: 'johndoe@gmail.com', gender: 'Male', date_of_birth: 'August 02, 1987', phone_number: '+2348 045 432 3321' } },
 //     // { title_id: 1, title: 'Payment Details', profile_content: { full_name: 'John Doe', }},
 //     { title_id: 2, title: 'Security', profile_content: { password: 'John Doe', last_changed: 'January 02, 2024' } },
 //     { title_id: 3, title: 'Preference', profile_content: { theme: 'Light mode', text_size: 'Small', font_style: "Normal", date_format: 'MM DD, YYYY' } },
@@ -21,40 +22,58 @@ const accountButtonProps = reactive([
 
 const profiles = reactive([
   { 
-    title: 'Profile Info', 
+    title: 'Personal Info', 
     profile_content: [
-      { id: 1, key: 'Full Name', value: 'John Doe' },
-      { id: 2, key: 'Email', value: 'johndoe@gmail.com' },
-      { id: 3, key: 'Gender', value: 'Male' },
-      { id: 4, key: 'Date Of Birth', value: 'August 02, 1987' },
-      { id: 5, key: 'Phone Number', value: '+2348 045 432 3321' }
+      { id: 1, key: 'Full Name', value: 'John Doe', isEdit: false },
+      { id: 2, key: 'Email', value: 'johndoe@gmail.com', isEdit: false },
+      { id: 3, key: 'Gender', value: 'Male', isEdit: false },
+      { id: 4, key: 'Date Of Birth', value: 'August 02, 1987', isEdit: false },
+      { id: 5, key: 'Phone Number', value: '+2348 045 432 3321', isEdit: false }
     ]
   },
   { 
     title: 'Security', 
     profile_content: [
-      { id: 1, key: 'Password', value: 'John Doe' },
-      { id: 2, key: 'Last Changed', value: 'January 02, 2024' }
+      { id: 1, key: 'Password', value: 'John Doe', isEdit: false },
+      { id: 2, key: 'Last Changed', value: 'January 02, 2024', isEdit: false }
     ]
   },
   { 
     title: 'Preference', 
     profile_content: [
-      { id: 1, key: 'Theme', value: 'Light mode' },
-      { id: 2, key: 'Text Size', value: 'Small' },
-      { id: 3, key: 'Font Style', value: 'Normal' },
-      { id: 4, key: 'Date Format', value: 'MM DD, YYYY' }
+      { id: 1, key: 'Theme', value: 'Light mode', isEdit: false },
+      { id: 2, key: 'Text Size', value: 'Small', isEdit: false },
+      { id: 3, key: 'Font Style', value: 'Normal', isEdit: false },
+      { id: 4, key: 'Date Format', value: 'MM DD, YYYY', isEdit: false }
     ]
   }
 ]);
 
 let currentButton = ref(accountButtonProps[0].name);
+let currentIndex = ref(0);
 
 const handelActiveButton = (buttonName) => {
     accountButtonProps.forEach(btn => {
         btn.isActive = (btn.name === buttonName);
         currentButton.value = buttonName;
     });
+
+    // Select profile
+    profiles.forEach((profile, index) => {
+        if(currentButton.value === profile.title){
+            currentIndex.value = index;
+        }
+    })
+}
+
+const handelSwitch = (id) => {
+    profiles[currentIndex.value].profile_content.forEach(content => {
+        content.isEdit = (content.id === id);
+    });
+}
+
+const handelEdit =  (id) => {
+    console.log(id);
 }
 </script>
 
@@ -67,9 +86,9 @@ const handelActiveButton = (buttonName) => {
                 <div class="h-full overflow-auto">
                     <ul id="button-list">
                         <li v-for="(button) in accountButtonProps" :key="button" :id="button.name" :class="{
-                            'cursor-pointer p-2 rounded flex gap-2 justify-start items-center transition-all': true,
+                            'cursor-pointer p-2 rounded flex gap-2 justify-start items-center transition-all':true,
                             'active-button': button.isActive,
-                            'hover:bg-gray-100': !button.isActive
+                            'hover:bg-gray-100': !button.isActive,
                         }" @click="handelActiveButton(button.name)"><i
                                 :class="[button.icon, 'text-black w-8 h-8 items-center justify-center rounded-md bg-gray-200']"
                                 style="display: flex;"></i>
@@ -88,90 +107,32 @@ const handelActiveButton = (buttonName) => {
                 </h3>
                 <div class="adjust-sm grid gap-4 grid-row-1-5 h-full">
                     <!-- Profile Items -->
-                    <div class="w-24 h-24 rounded-full border-2">
-                        <img :src="`profile.png`" alt="" class="rounded-full">
-                        <span><i
-                                class="pi pi-file-edit absolute ml-24 p-2 rounded-full hover:bg-gray-400 cursor-pointer"></i></span>
+                    <div class="w-24 h-24 rounded-full border-2 flex">
+                        <img :src="profileImage" alt="" class="rounded-full">
+                        <span>
+                            <i
+                                class="pi pi-file-edit absolute mt-16 p-2 rounded-full hover:bg-gray-200 cursor-pointer"></i>
+                        </span>
                     </div>
-                    <div class="grid gap-2">
-                        <div v-for="(item, index) in profiles[0].profile_content" class=" flex justify-between border-b border-gray-200 h-fit pb-4 items-center">
-                            <div class="profile-item">
+                    <!-- Profile Details -->
+                    <div class="grid gap-2 h-fit">
+                        <div v-for="(item, index) in profiles[currentIndex].profile_content" class="  border-b border-gray-200 h-fit pb-4">
+                            <form @submit.prevent="handelEdit(index)" class="" :id="item.id">
                                 <p class="profile-title font-bold text-gray-700">
                                     {{ item.key }}
                                 </p>
-                                <p class="profile-content text-gray-900">
-                                    {{ item.value }}
-                                </p>
-                            </div>
-                            <div class="edit-button">
-                                <a href="" class="" :id="item.id">Edit</a>
-                            </div>
+                                <div v-if="item.isEdit" class="profile-edit flex justify-between items-center">
+                                    <input type="text" :name="item.key" v-model="item.value" class="border-gray-400 bg-gray-100">
+                                    <button type="submit " class="hover:text-primary hover:font-semibold hover:underline" @click="handelSwitch">Update</button>
+                                </div>
+                                <div v-else class="profile-edit flex justify-between items-center">
+                                    <p class="profile-detail text-gray-900">
+                                        {{ item.value }}
+                                    </p>
+                                    <div class="edit-button transition-all hover:text-primary hover:font-semibold cursor-pointer hover:underline" :id="item.id" @click="handelSwitch(item.id)">Edit</div>
+                                </div>
+                            </form>
                         </div>
-                        <!-- <div class=" flex justify-between border-b border-gray-200 h-fit pb-4 items-center">
-                            <div class="profile-item">
-                                <p class="profile-title font-bold text-gray-700">
-                                    Full Name
-                                </p>
-                                <p class="profile-content text-gray-900">
-                                    John Doe
-                                </p>
-                            </div>
-                            <div class="edit-button">
-                                <a href="" class="">Edit</a>
-                            </div>
-                        </div>
-                        <div class=" flex justify-between border-b border-gray-200 h-fit pb-4 items-center">
-                            <div class="profile-item">
-                                <p class="profile-title font-bold text-gray-700">
-                                    Full Name
-                                </p>
-                                <p class="profile-content text-gray-900">
-                                    John Doe
-                                </p>
-                            </div>
-                            <div class="edit-button">
-                                <a href="" class="">Edit</a>
-                            </div>
-                        </div>
-                        <div class=" flex justify-between border-b border-gray-200 h-fit pb-4 items-center">
-                            <div class="profile-item">
-                                <p class="profile-title font-bold text-gray-700">
-                                    Full Name
-                                </p>
-                                <p class="profile-content text-gray-900">
-                                    John Doe
-                                </p>
-                            </div>
-                            <div class="edit-button">
-                                <a href="" class="">Edit</a>
-                            </div>
-                        </div>
-                        <div class=" flex justify-between border-b border-gray-200 h-fit pb-4 items-center">
-                            <div class="profile-item">
-                                <p class="profile-title font-bold text-gray-700">
-                                    Full Name
-                                </p>
-                                <p class="profile-content text-gray-900">
-                                    John Doe
-                                </p>
-                            </div>
-                            <div class="edit-button">
-                                <a href="" class="">Edit</a>
-                            </div>
-                        </div>
-                        <div class=" flex justify-between border-b border-gray-200 h-fit pb-4 items-center">
-                            <div class="profile-item">
-                                <p class="profile-title font-bold text-gray-700">
-                                    Full Name
-                                </p>
-                                <p class="profile-content text-gray-900">
-                                    John Doe
-                                </p>
-                            </div>
-                            <div class="edit-button">
-                                <a href="" class="">Edit</a>
-                            </div>
-                        </div> -->
                     </div>
                 </div>
             </div>
