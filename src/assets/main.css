@@ -14,12 +14,22 @@
     @apply px-10 py-6  flex text-2xl font-light cursor-pointer w-1/6 justify-center hover:brightness-110
 }
 
+.active-top-cal-btn{
+    @apply bg-black text-white  default-button p-2 text-sm justify-between hover:bg-gray-900
+}
+
 .dot{
-    @apply w-2 h-2 rounded-full
+    @apply rounded-full;
+    width: 6px;
+    height: 6px;
 }
 
 .active-date{
-    @apply bg-gray-300 hover:bg-gray-500
+    @apply bg-gray-300 hover:bg-gray-200 p-2 text-center cursor-pointer relative h-fit
+}
+
+.selected-date{
+    @apply bg-gray-200 hover:bg-gray-100 p-2 text-center cursor-pointer relative h-fit
 }
 
 .grid-col-1-\/5-4-1{
@@ -47,12 +57,12 @@
 .cs-scrollbar::-webkit-scrollbar-thumb{
     border-radius: 5px;
     width: 5px;
-    @apply rounded-md bg-black hover:bg-gray-800 active:cursor-grabbing cursor-grab 
+    @apply rounded-md bg-gray-600 hover:bg-gray-800 active:cursor-grabbing cursor-grab 
 }
 
 .cs-body-scrollbar::-webkit-scrollbar-thumb{
     border-radius: 5px;
     width: 10px;
     padding: 4px;
-    @apply rounded-md bg-black hover:bg-gray-800 active:cursor-grabbing cursor-grab 
+    @apply rounded-md bg-gray-600 hover:bg-gray-800 active:cursor-grabbing cursor-grab 
 }

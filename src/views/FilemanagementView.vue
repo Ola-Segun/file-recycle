@@ -8,8 +8,6 @@
 <template>
     <!-- Main content grid -->
     <div class="grid md:grid-cols-4 gap-4">
-        <!-- Months -->
-        <Months />
 
         <!-- Calendar -->
         <Calendar />

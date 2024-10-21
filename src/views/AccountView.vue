@@ -12,14 +12,6 @@ const accountButtonProps = reactive([
     { id: 5, name: 'Notification', icon: 'pi pi-bell', isActive: ref(false) },
 ]);
 
-// const profiles = reactive([
-//     { title_id: 1, title: 'Personal Info', profile_content: { full_name: 'John Doe', email: 'johndoe@gmail.com', gender: 'Male', date_of_birth: 'August 02, 1987', phone_number: '+2348 045 432 3321' } },
-//     // { title_id: 1, title: 'Payment Details', profile_content: { full_name: 'John Doe', }},
-//     { title_id: 2, title: 'Security', profile_content: { password: 'John Doe', last_changed: 'January 02, 2024' } },
-//     { title_id: 3, title: 'Preference', profile_content: { theme: 'Light mode', text_size: 'Small', font_style: "Normal", date_format: 'MM DD, YYYY' } },
-//     { title_id: 4, title: 'Notification', profile_content: { full_name: 'John Doe', } },
-// ]);
-
 const profiles = reactive([
   { 
     title: 'Personal Info', 
@@ -89,7 +81,8 @@ const handelEdit =  (id) => {
                             'cursor-pointer p-2 rounded flex gap-2 justify-start items-center transition-all':true,
                             'active-button': button.isActive,
                             'hover:bg-gray-100': !button.isActive,
-                        }" @click="handelActiveButton(button.name)"><i
+                        }" @click="handelActiveButton(button.name)">
+                        <i
                                 :class="[button.icon, 'text-black w-8 h-8 items-center justify-center rounded-md bg-gray-200']"
                                 style="display: flex;"></i>
                             {{ button.name }}
