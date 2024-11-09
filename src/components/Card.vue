@@ -22,7 +22,7 @@
 </script>
 
 <template>
-    <div :class="`${bg, padding, margin} ${col_span} bg-white border rounded-lg shadow-sm `">
+    <div :class="`${bg, padding, margin} ${col_span} bg-white border rounded-lg shadow-sm transition-all duration-500 ease-in-out`">
         <slot></slot>
     </div>
 </template>

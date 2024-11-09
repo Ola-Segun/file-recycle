@@ -3,6 +3,7 @@ import { reactive, ref, defineProps } from "vue";
 import Card from "./Card.vue";
 import dayjs from "dayjs";
 
+// Array of month buttons with their active states
 const monthButtonProps = reactive([
   { id: 1, name: "January", isActive: ref(true) },
   { id: 2, name: "Febuary", isActive: ref(false) },
@@ -18,6 +19,7 @@ const monthButtonProps = reactive([
   { id: 12, name: "December", isActive: ref(false) },
 ]);
 
+// Array of month names for reference
 const months = [
   "January",
   "February",
@@ -33,6 +35,7 @@ const months = [
   "December",
 ];
 
+// Calendar action buttons (upload, download, delete, warning)
 const calendarBtn = reactive([
   { name: "cal-upload", isActive: false },
   { name: "cal-download", isActive: false },
@@ -40,17 +43,18 @@ const calendarBtn = reactive([
   { name: "cal-warning", isActive: false },
 ]);
 
+// Get current date information
 const now = new Date();
 const currentYear = now.getFullYear();
 const currentMonth = now.getMonth();
 const currentDate = now.getDate();
 const message = 'Message';
 
+
+// Track selected states
 let selectedButton = ref(monthButtonProps[currentMonth].name);
-
 let selectedMonth = ref(0);
-let selectedYear = ref(2024);
-
+let selectedYear = ref(currentYear);
 let selectedDates = reactive([]);
 let selectedDatesProps = [];
 
@@ -60,6 +64,7 @@ const generateData = () => {
   emit('sendData', data);
 }
 
+// Function to get all dates for the selected month
 function getFullDatesOfMonth(year, month) {
   const startOfMonth = dayjs(`${year}-${month + 1}-01`);
   const daysInMonth = startOfMonth.daysInMonth();
@@ -67,6 +72,7 @@ function getFullDatesOfMonth(year, month) {
   // reset selectedDates
   selectedDatesProps = [];
 
+  // Generate date objects for each day in the month
   for (let day = 1; day <= daysInMonth; day++) {
     const dDate = startOfMonth.date(day).format("dddd D MMMM");
 
@@ -82,6 +88,7 @@ function getFullDatesOfMonth(year, month) {
   return selectedDatesProps;
 }
 
+// Add empty slots at start of month to align days correctly
 const adjustDatesToCalendar = () => {
   switch (selectedDatesProps[0].date.substring(0, 3)) {
     case "Mon":
@@ -123,6 +130,7 @@ const adjustDatesToCalendar = () => {
   }
 };
 
+// Handle month button selection
 const handelActiveButton = (buttonName) => {
   monthButtonProps.forEach((btn) => {
     btn.isActive = btn.name === buttonName;
@@ -135,6 +143,7 @@ const handelActiveButton = (buttonName) => {
   getFullDatesOfMonth(selectedYear.value, selectedMonth.value - 1);
 };
 
+// Toggle calendar action buttons (upload, download, etc)
 const handelSelectCalendarActions = (name) => {
   calendarBtn.forEach((btn) => {
     if (btn.name === name) {
@@ -147,6 +156,7 @@ const handelSelectCalendarActions = (name) => {
   });
 };
 
+// Handle date selection in calendar
 const handelSelectDates = (selectedDate) => {
   selectedDatesProps.forEach((prop) => {
     if (prop.date) {
@@ -158,15 +168,56 @@ const handelSelectDates = (selectedDate) => {
   // console.log(selectedDatesProps.values);
 };
 
-// const handelNextMonth = (currentMonth) => {
-//   handelActiveButton(months[currentMonth + 1]);
-// }
+// Navigate to next month, handling year transition
+const handleNextMonth = () => {
+  const currentMonthIndex = months.indexOf(selectedButton.value);
+  if (currentMonthIndex === 11) {
+    // If December, move to January of next year
+    selectedYear.value++;
+    selectedYear.value = selectedYear.value + 1;
+    handelActiveButton(months[0]);
+  } else {
+    // Move to next month
+    handelActiveButton(months[currentMonthIndex + 1]);
+  }
+  // Update the header text to show new year
+  adjustDatesToCalendar();
+};
 
+// Navigate to previous month, handling year transition
+const handlePreviousMonth = () => {
+  const currentMonthIndex = months.indexOf(selectedButton.value);
+  if (currentMonthIndex === 0) {
+    // If January, move to December of previous year
+    selectedYear.value--;
+    handelActiveButton(months[11]);
+  } else {
+    // Move to previous month
+    handelActiveButton(months[currentMonthIndex - 1]);
+  }
+  // Update the header text to show new year
+  adjustDatesToCalendar();
+};
+
+// Add these new methods for year navigation
+const handleNextYear = () => {
+  selectedYear.value++;
+  // Refresh calendar with new year while keeping same month
+  getFullDatesOfMonth(selectedYear.value, selectedMonth.value - 1);
+  adjustDatesToCalendar();
+};
+
+const handlePreviousYear = () => {
+  selectedYear.value--;
+  // Refresh calendar with new year while keeping same month
+  getFullDatesOfMonth(selectedYear.value, selectedMonth.value - 1);
+  adjustDatesToCalendar();
+};
+
+// Initialize calendar with current month and year
 getFullDatesOfMonth(currentYear, currentMonth);
 handelActiveButton(months[currentMonth]);
 adjustDatesToCalendar();
-
-// console.log(selectedDatesProps);
 
 
 </script>
@@ -200,7 +251,7 @@ adjustDatesToCalendar();
   <Card col_span="col-span-2">
     <div class="p-6 h-full grid grid-col-1-\/5-4-1">
       <h3 class="text-2xl font-semibold mb-4 flex justify-between items-center">
-        <span>{{ selectedButton }}, {{ currentYear }}</span>
+        <span>{{ selectedButton }}, {{ selectedYear }}</span>
         <div class="flex space-x-2">
           <button
             :class="
@@ -269,7 +320,8 @@ adjustDatesToCalendar();
                 'p-2 text-center cursor-pointer relative hover:bg-gray-100 dark:hover:bg-gray-100 h-fit': true, // Default class for all days
                 'active-date':
                   props.date.split(' ')[1] === currentDate.toString() &&
-                  props.date.split(' ')[2] === months[currentMonth], // Current date condition
+                  props.date.split(' ')[2] === months[currentMonth] && // Current date condition
+                  selectedYear === currentYear, // Current date condition
                 'selected-date': props.isSelected, // Apply 'selected-button' when props.isSelected is true
                 hidden: !props.date, // Hide if date is empty
               }"
@@ -310,11 +362,22 @@ adjustDatesToCalendar();
         </div>
         <!-- More days... -->
       </div>
-      <div class="flex justify-end align-bottom items-center">
-        <button class="p-2 default-button border-none hover:bg-gray-200">
+      <div class="flex gap-2 justify-end align-bottom items-center">
+        <button 
+          class="p-2 default-button border-none hover:bg-gray-200"
+          @click="handlePreviousYear"
+          title="Previous Year"
+        >
           <i class="pi pi-chevron-left"></i>
         </button>
-        <button class="p-2 default-button border-none hover:bg-gray-200">
+        <div :class="selectedYear === currentYear ? 'text-blue-800 font-semibold' : 'text-gray-400 font-semibold'">
+          {{ selectedYear }}
+        </div>
+        <button 
+          class="p-2 default-button border-none hover:bg-gray-200"
+          @click="handleNextYear"
+          title="Next Year"
+        >
           <i class="pi pi-chevron-right"></i>
         </button>
       </div>

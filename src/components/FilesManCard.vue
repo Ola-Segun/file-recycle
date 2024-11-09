@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref, watch, nextTick } from "vue";
+import { reactive, ref, watch, nextTick, computed } from "vue";
 import Card from "./Card.vue";
 import fileDetailsCard from "./filesComponent/fileDetailsCard.vue";
 // import FileManGrid from "./filesComponent/fileManGrid";
@@ -74,6 +74,36 @@ const fileData = ref([
     type: "Image",
     size: "200",
     path: "folderFive/images",
+    createdDate: "Sunday, September 29, 2024",
+    createdTime: "7:59 AM",
+    modifiedDate: "Monday, September 30, 2024",
+    modifiedTime: "8:00 AM",
+    accessedDate: "Tuesday, September 31, 2024",
+    accessedTime: "8:01 AM",
+    isSelected: false,
+  },
+  {
+    id: 6,
+    name: "File Six",
+    date: "2024 - 10 - 20",
+    type: "Image",
+    size: "200",
+    path: "folderSix/images",
+    createdDate: "Sunday, September 29, 2024",
+    createdTime: "7:59 AM",
+    modifiedDate: "Monday, September 30, 2024",
+    modifiedTime: "8:00 AM",
+    accessedDate: "Tuesday, September 31, 2024",
+    accessedTime: "8:01 AM",
+    isSelected: false,
+  },
+  {
+    id: 7,
+    name: "File Seven",
+    date: "2024 - 10 - 20",
+    type: "Image",
+    size: "200",
+    path: "folderSeven/images",
     createdDate: "Sunday, September 29, 2024",
     createdTime: "7:59 AM",
     modifiedDate: "Monday, September 30, 2024",
@@ -248,6 +278,25 @@ const toggleExpand = () => {
   isExpanded.value = !isExpanded.value;
 };
 
+// Add after your existing refs
+const searchQuery = ref('');
+
+// Add this computed property
+const filteredFileData = computed(() => {
+  const query = searchQuery.value.toLowerCase().trim();
+  
+  if (!query) return fileData.value;
+  
+  return fileData.value.filter(file => {
+    return (
+      file.name.toLowerCase().includes(query) ||
+      file.size.toString().toLowerCase().includes(query) ||
+      file.type.toLowerCase().includes(query) ||
+      file.date.toLowerCase().includes(query)
+    );
+  });
+});
+
 </script>
 
 <template>
@@ -261,14 +310,15 @@ const toggleExpand = () => {
       <div class="flex justify-between items-center mb-4">
         <h3 class="text-2xl font-semibold">Files</h3>
         <div class="flex-grow mx-4">
-          <form class="flex items-center max-w-md mx-auto">
+          <form class="flex items-center max-w-md mx-auto" @submit.prevent>
             <input
+              v-model="searchQuery"
               type="search"
-              placeholder="Search files..."
+              placeholder="Search by name, size, type or date..."
               class="w-full px-4 py-2 rounded-l-md border-gray-300 focus:ring-blue-500 focus:border-blue-500 bg-gray-100"
             />
             <button
-              type="submit"
+              type="button"
               class="px-4 py-2 bg-blue-500 text-white rounded-r-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50"
             >
               <i class="pi pi-search"></i>
@@ -300,7 +350,7 @@ const toggleExpand = () => {
           </button>
           <!-- Add expand button -->
           <button
-            class="default-button p-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+            class="default-button p-2 hover:bg-gray-200 dark:hover:bg-gray-700 text-slate-700"
             @click="toggleExpand"
           >
             <i :class="isExpanded ? 'pi pi-compress' : 'pi pi-expand'"></i>
@@ -315,7 +365,7 @@ const toggleExpand = () => {
       ]">
         <div class="flex flex-wrap gap-3" id="grid-table">
           <FileManGrid
-            :files="fileData"
+            :files="filteredFileData"
             :resetSelection="resetSelection"
             @sendToParent="handelDataFromFileManGrid"
           />
@@ -323,7 +373,7 @@ const toggleExpand = () => {
 
         <div class="hidden" id="list-table">
           <FileManList
-            :files="fileData"
+            :files="filteredFileData"
             :resetSelection="resetSelection"
             @sendToParent="handelDataFromFileManList"
           />

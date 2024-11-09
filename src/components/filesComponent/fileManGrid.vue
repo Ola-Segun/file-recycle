@@ -61,7 +61,7 @@ const cancelEdit = () => {
   <div
     v-for="(file, index) in props.files"
     :key="file.id"
-    class="p-4 bg-white border rounded-lg shadow w-[17.5rem] hover:bg-gray-100 cursor-pointer"
+    class="p-4 bg-white border rounded-lg shadow w-[17rem] hover:bg-gray-100 cursor-pointer"
   >
     <div class="flex justify-between items-start">
       <input
@@ -83,7 +83,7 @@ const cancelEdit = () => {
         <input 
           type="text" 
           v-model="file.name"
-          class="border-gray-400 bg-gray-100 rounded w-full"
+          class="border-gray-400 bg-gray-200 rounded w-full px-1"
         >
         <button 
           type="submit" 
