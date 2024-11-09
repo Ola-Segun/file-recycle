@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 .default-button{
-    @apply rounded-md h-10 px-2 hover:bg-gray-100 flex justify-center items-center min-w-10 w-fit gap-1
+    @apply rounded-md h-10 px-2 hover:bg-gray-100 flex justify-center items-center min-w-10 w-fit gap-1 cursor-pointer
 }
 
 .active-button{
@@ -46,6 +46,10 @@
 
 .adjust-sm{
     padding: 0 5%;
+}
+
+.details-text{
+    @apply flex flex-wrap gap-1 w-full justify-between;
 }
 
 .cs-scrollbar::-webkit-scrollbar{

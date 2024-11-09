@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, defineProps } from "vue";
 import Card from "./Card.vue";
 import dayjs from "dayjs";
 
@@ -44,6 +44,7 @@ const now = new Date();
 const currentYear = now.getFullYear();
 const currentMonth = now.getMonth();
 const currentDate = now.getDate();
+const message = 'Message';
 
 let selectedButton = ref(monthButtonProps[currentMonth].name);
 
@@ -51,25 +52,33 @@ let selectedMonth = ref(0);
 let selectedYear = ref(2024);
 
 let selectedDates = reactive([]);
-let selectedDatesProps = reactive([]);
+let selectedDatesProps = [];
+
+const emit = defineEmits(['sendData']);
+const generateData = () => {
+  const data = selectedButton;
+  emit('sendData', data);
+}
 
 function getFullDatesOfMonth(year, month) {
   const startOfMonth = dayjs(`${year}-${month + 1}-01`);
   const daysInMonth = startOfMonth.daysInMonth();
-  let porpsItem;
 
   // reset selectedDates
   selectedDatesProps = [];
 
   for (let day = 1; day <= daysInMonth; day++) {
     const dDate = startOfMonth.date(day).format("dddd D MMMM");
-    if (dDate.split(" ")[1] === currentDate.toString()) {
-      porpsItem = { date: dDate, isCurrentDate: true, isSelected: false };
-    } else {
-      porpsItem = { date: dDate, isCurrentDate: false, isSelected: false };
-    }
+
+    const porpsItem = reactive({
+      date: dDate,
+      isCurrentDate: dDate.split(" ")[1] === currentDate.toString(),
+      isSelected: ref(false),
+    });
+
     selectedDatesProps.push(porpsItem);
   }
+  generateData();
   return selectedDatesProps;
 }
 
@@ -138,7 +147,20 @@ const handelSelectCalendarActions = (name) => {
   });
 };
 
+const handelSelectDates = (selectedDate) => {
+  selectedDatesProps.forEach((prop) => {
+    if (prop.date) {
+      // Compare the selected date with the current date
+      const currentDateString = prop.date.split(" ")[1]; // Extract the day part
+      prop.isSelected = currentDateString === selectedDate.toString(); // Set isSelected to true for the clicked date
+    }
+  });
+  // console.log(selectedDatesProps.values);
+};
 
+// const handelNextMonth = (currentMonth) => {
+//   handelActiveButton(months[currentMonth + 1]);
+// }
 
 getFullDatesOfMonth(currentYear, currentMonth);
 handelActiveButton(months[currentMonth]);
@@ -146,18 +168,6 @@ adjustDatesToCalendar();
 
 // console.log(selectedDatesProps);
 
-const handelSelectDates = (selectedDate) => {
-  selectedDatesProps.forEach((prop) => {
-    
-    if(prop.date){
-        // Compare the selected date with the current date
-        const currentDateString = prop.date.split(" ")[1]; // Extract the day part
-        prop.isSelected = (currentDateString === selectedDate.toString()); // Set isSelected to true for the clicked date
-    }
-  });
-//   adjustDatesToCalendar();
-  console.log(selectedDatesProps);
-};
 
 </script>
 
@@ -177,7 +187,7 @@ const handelSelectDates = (selectedDate) => {
               'active-button': button.isActive,
               'hover:bg-gray-100': !button.isActive,
             }"
-            @click="handelActiveButton(button.name), adjustDatesToCalendar()"
+            @click="handelActiveButton(button.name), adjustDatesToCalendar(), generateData()"
           >
             {{ button.name }}
           </li>
@@ -190,7 +200,7 @@ const handelSelectDates = (selectedDate) => {
   <Card col_span="col-span-2">
     <div class="p-6 h-full grid grid-col-1-\/5-4-1">
       <h3 class="text-2xl font-semibold mb-4 flex justify-between items-center">
-        <span>{{ selectedButton }}</span>
+        <span>{{ selectedButton }}, {{ currentYear }}</span>
         <div class="flex space-x-2">
           <button
             :class="
@@ -249,16 +259,21 @@ const handelSelectDates = (selectedDate) => {
       </div>
       <div class="grid grid-cols-7">
         <!-- Calendar days -->
-        <div v-for="props in selectedDatesProps" @click="handelSelectDates(props.date.split(' ')[1])">
+        <div
+          v-for="props in selectedDatesProps"
+          @click="handelSelectDates(props.date.split(' ')[1])"
+        >
           <div v-if="props">
             <div
-  :class="{
-    'p-2 text-center cursor-pointer relative hover:bg-gray-100 dark:hover:bg-gray-100 h-fit': true, // Default class for all days
-    'active-date': props.date.split(' ')[1] === currentDate.toString() && props.date.split(' ')[2] === months[currentMonth], // Current date condition
-    'selected-button': props.isSelected, // Apply 'selected-button' when props.isSelected is true
-    'hidden': !props.date, // Hide if date is empty
-  }"
->
+              :class="{
+                'p-2 text-center cursor-pointer relative hover:bg-gray-100 dark:hover:bg-gray-100 h-fit': true, // Default class for all days
+                'active-date':
+                  props.date.split(' ')[1] === currentDate.toString() &&
+                  props.date.split(' ')[2] === months[currentMonth], // Current date condition
+                'selected-date': props.isSelected, // Apply 'selected-button' when props.isSelected is true
+                hidden: !props.date, // Hide if date is empty
+              }"
+            >
               {{ props.date.split(" ")[1] }}
               <div class="dots flex gap-1 h-2">
                 <div

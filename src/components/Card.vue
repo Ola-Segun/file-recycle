@@ -13,12 +13,16 @@
         col_span:{
             type: String,
             default: 'col-span-1'
+        },
+        margin:{
+            type:String,
+            default: ''
         }
     })
 </script>
 
 <template>
-    <div :class="`${bg, padding} ${col_span} bg-white border rounded-lg shadow-sm `">
+    <div :class="`${bg, padding, margin} ${col_span} bg-white border rounded-lg shadow-sm `">
         <slot></slot>
     </div>
 </template>

@@ -18,7 +18,9 @@
         <nav class="flex items-center gap-2">
             <RouterLink to="/" :class="[isActiveLink('/') ? 'active-button' : 'default-button', 'nav-button text-sm font-medium']">Home</RouterLink>
             <RouterLink to="/manage/files" :class="[isActiveLink('/manage/files') ? 'active-button' : 'default-button', 'nav-button text-sm font-medium']">File Management</RouterLink>
-            <RouterLink to="/manage/account" :class="[isActiveLink('/manage/account') ? 'active-button' : 'default-button', 'nav-button text-sm font-medium']">Account</RouterLink> </nav>
+            <RouterLink to="/manage/account" :class="[isActiveLink('/manage/account') ? 'active-button' : 'default-button', 'nav-button text-sm font-medium']">Account</RouterLink>
+            <RouterLink to="/man/files" :class="[isActiveLink('/man/files') ? 'active-button' : 'default-button', 'nav-button text-sm font-medium']">File Man</RouterLink> 
+        </nav>
     </div>
     <div class="flex items-center space-x-4 w-fit p-1">
         <button class="inline-flex items-center justify-center rounded-md text-sm font-medium bg-primary text-white px-4 py-2 hover:bg-primary/90">
