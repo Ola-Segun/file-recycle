@@ -10,7 +10,7 @@
 <template>
     <!-- Action buttons -->
 
-    <div :class="`${bg} action-btn px-6 h-3/5 w-1/5 py-4 flex items-center gap-2 rounded-md shadow-sm`">
+    <div :class="`${bg} action-btn px-6 h-3/5 w-1/5 py-4 flex items-center gap-2 rounded-md shadow-sm active:scale-[0.98] transition-all duration-[0.1s]`">
         <slot></slot>
     </div>
 <!-- 
