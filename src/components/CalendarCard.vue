@@ -58,9 +58,11 @@ let selectedYear = ref(currentYear);
 let selectedDates = reactive([]);
 let selectedDatesProps = [];
 
+
 const emit = defineEmits(['sendData']);
+// Pass to Statistics card
 const generateData = () => {
-  const data = selectedButton;
+  const data = selectedButton.value.substring(0,3);
   emit('sendData', data);
 }
 

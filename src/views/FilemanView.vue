@@ -1,10 +1,8 @@
 <script setup>
 import { ref } from "vue";
 
-import Card from "@/components/Card.vue";
 import Calendar from "@/components/CalendarCard.vue";
 import Statistics from "@/components/StatisticsCard.vue";
-import Months from "@/components/MonthsCard.vue";
 import FilesManCard from "@/components/FilesManCard.vue";
 import FileDetailsCard from "@/components/filesComponent/fileDetailsCard.vue";
 import FileDeleteCard from "@/components/filesComponent/fileDeleteCard.vue";

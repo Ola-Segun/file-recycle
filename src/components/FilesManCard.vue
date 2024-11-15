@@ -1,8 +1,6 @@
 <script setup>
 import { reactive, ref, watch, nextTick, computed } from "vue";
 import Card from "./Card.vue";
-import fileDetailsCard from "./filesComponent/fileDetailsCard.vue";
-// import FileManGrid from "./filesComponent/fileManGrid";
 import FileManGrid from "./filesComponent/fileManGrid.vue";
 import FileManList from "./filesComponent/fileManList.vue";
 
@@ -25,7 +23,7 @@ const fileData = ref([
   {
     id: 2,
     name: "File Two",
-    date: "2024 - 10 - 20",
+    date: "2024 - 09 - 20",
     type: "Image",
     size: "200",
     path: "folderTwo/images",
@@ -40,7 +38,7 @@ const fileData = ref([
   {
     id: 3,
     name: "File Three",
-    date: "2024 - 10 - 20",
+    date: "2024 - 01 - 20",
     type: "Image",
     size: "200",
     path: "folderThree/images",
@@ -55,7 +53,7 @@ const fileData = ref([
   {
     id: 4,
     name: "File Four",
-    date: "2024 - 10 - 20",
+    date: "2024 - 07 - 20",
     type: "Image",
     size: "200",
     path: "folderFour/images",
@@ -85,7 +83,7 @@ const fileData = ref([
   {
     id: 6,
     name: "File Six",
-    date: "2024 - 10 - 20",
+    date: "2024 - 08 - 20",
     type: "Image",
     size: "200",
     path: "folderSix/images",
@@ -100,7 +98,7 @@ const fileData = ref([
   {
     id: 7,
     name: "File Seven",
-    date: "2024 - 10 - 20",
+    date: "2024 - 02 - 20",
     type: "Image",
     size: "200",
     path: "folderSeven/images",
@@ -302,7 +300,7 @@ const filteredFileData = computed(() => {
 <template>
   <Card :margin="isExpanded ? '' : 'mt-6'" 
         :class="[
-          'transition-all duration-500 ease-in-out',
+          'transition-all duration-[300ms] ease-in-out',
           isExpanded ? 'fixed top-24 left-0 right-0 bottom-0 z-10 m-4' : ''
         ]">
     <div class="p-6">

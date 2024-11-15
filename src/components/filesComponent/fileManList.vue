@@ -102,7 +102,7 @@ const cancelEdit = () => {
             <input 
               type="text" 
               v-model="file.name"
-              class="border-gray-400 bg-gray-100 rounded flex-grow mr-[60%]"
+              class="border-gray-400 bg-gray-200 rounded flex-grow mr-[60%]"
             >
             <button 
               type="submit" 
